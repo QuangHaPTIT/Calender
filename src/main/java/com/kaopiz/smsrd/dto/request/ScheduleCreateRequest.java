@@ -1,9 +1,7 @@
-package com.kaopiz.smsrd.dto;
+package com.kaopiz.smsrd.dto.request;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -34,7 +32,7 @@ public class ScheduleCreateRequest {
     private boolean isPublic = false;
 
     @Size(max = 50)
-    private String alertType;  // "10分前", "30分前", "1時間前", "1日前", "カスタム"
+    private AlertType alertType;  // "10分前", "30分前", "1時間前", "1日前", "カスタム"
 
     private Integer alertCustomMinutes; // Required if alertType is "カスタム"
 
@@ -51,6 +49,23 @@ public class ScheduleCreateRequest {
         private Long inviteeWorkerId;
 
         private Long inviteeVendorId;
+    }
+
+    @AssertTrue(message = "Start must be before end")
+    public boolean isStartBeforeEnd() {
+        if (startDateTime == null || endDateTime == null) return true;
+        return startDateTime.isBefore(endDateTime);
+    }
+
+    @AssertTrue(message = "Custom minutes required for custom alert")
+    public boolean isAlertCustomValid() {
+        if (alertType == null) return true;
+
+        if (alertType == AlertType.CUSTOM) {
+            return alertCustomMinutes != null && alertCustomMinutes > 0;
+        }
+
+        return alertCustomMinutes == null;
     }
 
     @Getter

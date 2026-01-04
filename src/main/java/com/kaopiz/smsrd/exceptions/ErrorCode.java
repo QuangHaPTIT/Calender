@@ -14,7 +14,17 @@ public enum ErrorCode {
     INVALID_FORMAT("validation.invalid_format"),
     EMAIL_REQUIRED("validation.email.required"),
     EMAIL_INVALID("validation.email.invalid"),
-    PASSWORD_TOO_SHORT("validation.password.min_length");
+    PASSWORD_TOO_SHORT("validation.password.min_length"),
+
+    SCHEDULE_NOT_FOUND("schedule.not_found"),
+    CONSTRUCTION_SITE_NOT_FOUND("construction.site.not_found"),
+    CATEGORY_NOT_FOUND("schedule.category.not_found"),
+    PERSONNEL_NOT_FOUND("personnel.not_found"),
+    VENDOR_NOT_FOUND("vendor.not_found"),
+    SCHEDULE_UNAUTHORIZED("schedule.unauthorized"),
+    SCHEDULE_TIME_INVALID("schedule.time.invalid"),
+    SCHEDULE_ALERT_INVALID("schedule.alert.invalid"),
+    SCHEDULE_INVITATION_INVALID("schedule.invitation.invalid"),
     ;
 
     private final String code;
