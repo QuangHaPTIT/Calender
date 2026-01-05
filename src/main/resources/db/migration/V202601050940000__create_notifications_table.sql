@@ -1,6 +1,6 @@
 CREATE TABLE notifications (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    enterprise_id VARCHAR(255) NOT NULL COMMENT 'Tenant ID',
+    enterprise_id BIGINT NOT NULL COMMENT 'Tenant ID',
     worker_id VARCHAR(255) NOT NULL COMMENT 'Receiver Worker ID',
     notification_type VARCHAR(50) NOT NULL COMMENT 'INVITED or UPDATED or DELETED',
     schedule_id BIGINT NULL COMMENT 'Related schedule nullable',

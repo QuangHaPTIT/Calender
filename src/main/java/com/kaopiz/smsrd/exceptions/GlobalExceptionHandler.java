@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.validation.ConstraintViolation;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.Locale;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
+@Slf4j
 public class GlobalExceptionHandler {
     private final MessageSource messageSource;
 
@@ -235,7 +237,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<@NonNull ErrorMessage> handleGenericException(
             Exception ex,
             Locale locale) {
-
+        log.error(String.valueOf(ex));
         String message = messageSource.getMessage(
                 "error.internal_server_error",
                 null,

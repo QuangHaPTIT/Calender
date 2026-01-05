@@ -21,10 +21,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class ScheduleCategory extends BaseEntity {
 
-    @NotBlank
-    @Size(max = 255)
     @Column(name = "enterprise_id", nullable = false)
-    private String enterpriseId;
+    private Long enterpriseId;
 
     @NotBlank
     @Size(max = 255)
@@ -48,7 +46,7 @@ public class ScheduleCategory extends BaseEntity {
     private Boolean isActive = true;
 
     public ScheduleCategory(
-            String enterpriseId,
+            Long enterpriseId,
             String nameJa,
             String nameEn,
             String nameKo,

@@ -22,7 +22,7 @@ public class ScheduleInvitation extends BaseEntity {
     @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private InviteeType inviteeType;
 

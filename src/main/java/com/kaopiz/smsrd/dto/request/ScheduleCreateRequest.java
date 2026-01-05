@@ -1,16 +1,25 @@
 package com.kaopiz.smsrd.dto.request;
 
+import com.kaopiz.smsrd.model.Schedule;
+import com.kaopiz.smsrd.model.ScheduleInvitation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ScheduleCreateRequest {
+
+    @NotNull
+    private Long enterpriseId;
 
     @NotNull
     private Long constructionSiteId;
@@ -31,8 +40,7 @@ public class ScheduleCreateRequest {
     @Builder.Default
     private boolean isPublic = false;
 
-    @Size(max = 50)
-    private AlertType alertType;  // "10分前", "30分前", "1時間前", "1日前", "カスタム"
+    private Schedule.AlertType alertType;  // "10分前", "30分前", "1時間前", "1日前", "カスタム"
 
     private Integer alertCustomMinutes; // Required if alertType is "カスタム"
 
@@ -41,14 +49,30 @@ public class ScheduleCreateRequest {
 
     private List<@Valid InvitationRequest> invitations;
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class InvitationRequest {
-        @NotBlank
-        @Size(max = 50)
-        private String inviteeType; // "WORKER", "VENDOR"
+        @NotNull(message = "Invitee type is required")
+        private ScheduleInvitation.InviteeType inviteeType;
 
         private Long inviteeWorkerId;
 
         private Long inviteeVendorId;
+
+        @AssertTrue(message = "Worker ID or Vendor ID must be provided based on invitee type")
+        public boolean isValidInvitee() {
+            if (inviteeType == null) return false;
+            
+            if (inviteeType == ScheduleInvitation.InviteeType.WORKER) {
+                return inviteeWorkerId != null && inviteeWorkerId > 0;
+            }
+            if (inviteeType == ScheduleInvitation.InviteeType.VENDOR) {
+                return inviteeVendorId != null && inviteeVendorId > 0;
+            }
+            return false;
+        }
     }
 
     @AssertTrue(message = "Start must be before end")
@@ -57,36 +81,22 @@ public class ScheduleCreateRequest {
         return startDateTime.isBefore(endDateTime);
     }
 
+    @AssertTrue(message = "If schedule is not public, at least one invitation is required")
+    public boolean isValidInvitations() {
+        if (!isPublic) {
+            return invitations != null && !invitations.isEmpty();
+        }
+        return true;
+    }
+
     @AssertTrue(message = "Custom minutes required for custom alert")
     public boolean isAlertCustomValid() {
         if (alertType == null) return true;
 
-        if (alertType == AlertType.CUSTOM) {
+        if (alertType == Schedule.AlertType.CUSTOM) {
             return alertCustomMinutes != null && alertCustomMinutes > 0;
         }
 
         return alertCustomMinutes == null;
-    }
-
-    @Getter
-    public static enum AlertType {
-        TEN_MINUTES_BEFORE("10分前", 10),
-        THIRTY_MINUTES_BEFORE("30分前", 30),
-        ONE_HOUR_BEFORE("1時間前", 60),
-        ONE_DAY_BEFORE("1日前", 1440),
-        CUSTOM("カスタム", null)
-        ;
-
-        private final String displayName;
-        private final Integer minutes;
-
-        AlertType (String displayName, Integer minutes) {
-            this.displayName = displayName;
-            this.minutes = minutes;
-        }
-
-        public boolean isCustom() {
-            return this == CUSTOM;
-        }
     }
 }

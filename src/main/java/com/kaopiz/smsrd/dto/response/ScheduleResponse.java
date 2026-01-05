@@ -1,10 +1,12 @@
 package com.kaopiz.smsrd.dto.response;
 
-import com.kaopiz.smsrd.dto.request.ScheduleCreateRequest;
+import com.kaopiz.smsrd.model.Schedule;
+import com.kaopiz.smsrd.model.ScheduleInvitation;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -15,9 +17,17 @@ public class ScheduleResponse {
     private LocalDateTime endDateTime;
     private Boolean isAllDay;
     private Boolean isPublic;
-    private ScheduleCreateRequest.AlertType alertType;
+    private Schedule.AlertType alertType;
     private Integer alertCustomMinutes;
     private String content;
+
+    private CategoryDto category;
+    private ConstructionSiteDto constructionSite;
+    private CreatorDto creator;
+    private List<InvitationDto> invitations;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
 
     @Getter
     @Builder
@@ -46,8 +56,10 @@ public class ScheduleResponse {
     @Builder
     public static class InvitationDto {
         private Long id;
-        private String inviteeId;
-        private String inviteeName;
-        private String vendorName; // for WORKER type
+        private ScheduleInvitation.InviteeType inviteeType;
+        private Long inviteeWorkerId;
+        private String inviteeWorkerName;
+        private Long inviteeVendorId;
+        private String inviteeVendorName;
     }
 }

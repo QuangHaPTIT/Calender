@@ -1,6 +1,6 @@
 CREATE TABLE schedule_categories (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    enterprise_id VARCHAR(255) NOT NULL COMMENT 'Tenant ID',
+    enterprise_id BIGINT NOT NULL COMMENT 'Tenant ID',
     name_ja VARCHAR(255) NOT NULL COMMENT 'Category name Japanese',
     name_en VARCHAR(255) COMMENT 'Category name English Phase 2',
     name_ko VARCHAR(255) COMMENT 'Category name Korean Phase 2',

@@ -17,3 +17,20 @@ spring:
     locations: ${FLYWAY_LOCATIONS:classpath:db/migration}
     baseline-on-migrate: ${FLYWAY_BASELINE_ON_MIGRATE:true}
     out-of-order: ${FLYWAY_OUT_OF_ORDER:true}
+
+
+firebase:
+  enabled: true
+  credentials-path: ${FIREBASE_CREDENTIALS_PATH:classpath:firebase/smsrd-firebase-adminsdk.json}
+  database-url: ${FIREBASE_DATABASE_URL:https://smsrd-notifications.firebaseio.com}
+  project-id: ${FIREBASE_PROJECT_ID:}
+  connect-timeout-seconds: 10
+  read-timeout-seconds: 10
+
+aws:
+  sns:
+    enabled: true
+    region: ${AWS_REGION:ap-southeast-1}
+    access-key: ${AWS_ACCESS_KEY_ID:}
+    secret-key: ${AWS_SECRET_ACCESS_KEY:}
+    platform-application-arn: ${SNS_PLATFORM_ARN:}

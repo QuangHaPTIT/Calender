@@ -24,6 +24,17 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.flywaydb:flyway-mysql'
+
+    // AWS SDK v2 for SNS
+    implementation 'software.amazon.awssdk:sns:2.20.0'
+    implementation 'software.amazon.awssdk:auth:2.20.0'
+
+    // Firebase Admin SDK
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
+
+    // For JSON processing (if not already added)
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'

@@ -7,8 +7,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,19 +23,17 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public class Schedule extends BaseEntity {
 
-    @NotBlank
-    @Size(max = 255)
     @Column(name = "enterprise_id", nullable = false)
-    private String enterpriseId;
+    private Long enterpriseId;
 
-    @NotBlank
-    @Size(max = 255)
-    @Column(name = "construction_site_id", nullable = false)
-    private String constructionSiteId;
+    @ManyToOne
+    @JoinColumn(name = "construction_site_id", nullable = false)
+    private ConstructionSite constructionSite;
 
     @ManyToOne
     @JoinColumn(name = "creator_worker_id", referencedColumnName = "id", nullable = false)
     private Personnel creatorWorker;
+    
     @ManyToOne
     @JoinColumn(name = "creator_vendor_id", referencedColumnName = "id", nullable = false)
     private Vendor creatorVendor;
@@ -63,9 +65,9 @@ public class Schedule extends BaseEntity {
     @Column(name = "is_public")
     private Boolean isPublic = false;
 
-    @Size(max = 50)
     @Column(name = "alert_type")
-    private String alertType;
+    @Enumerated(EnumType.STRING)
+    private AlertType alertType;
 
     @Column(name = "alert_custom_minutes")
     private Integer alertCustomMinutes;
@@ -75,6 +77,30 @@ public class Schedule extends BaseEntity {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    @OneToMany(mappedBy = "schedule", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<ScheduleInvitation> invitations = new ArrayList<>();
+
+    @Getter
+    public enum AlertType {
+        TEN_MINUTES_BEFORE( 10),
+        THIRTY_MINUTES_BEFORE( 30),
+        ONE_HOUR_BEFORE( 60),
+        ONE_DAY_BEFORE(1440),
+        CUSTOM(null)
+        ;
+
+        private final Integer minutes;
+
+        AlertType (Integer minutes) {
+            this.minutes = minutes;
+        }
+
+        public boolean isCustom() {
+            return this == CUSTOM;
+        }
+    }
 
 }
 
